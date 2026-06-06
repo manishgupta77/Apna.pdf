@@ -1,0 +1,11 @@
+fastapi==0.110.0
+uvicorn==0.27.1
+python-multipart==0.0.9
+pymupdf==1.24.0
+img2pdf==0.5.1
+Pillow==10.2.0
+reportlab==4.1.0
+python-docx==1.1.0
+openpyxl==3.1.2
+pdf2docx==0.5.8
+python-pptx==0.6.23

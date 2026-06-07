@@ -1,3 +1,4 @@
+import { IMAGE_API } from '../api.js'
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import FileUploader from '../components/common/FileUploader.jsx'
@@ -5,14 +6,14 @@ import toast from 'react-hot-toast'
 import axios from 'axios'
 
 const TOOL_CONFIG = {
-  convert:   { title: 'Convert Image',  desc: 'Convert between image formats',       icon: '🔄' },
-  resize:    { title: 'Resize Image',   desc: 'Change image width & height',         icon: '📐' },
-  compress:  { title: 'Compress Image', desc: 'Reduce image file size',              icon: '🗜️' },
-  crop:      { title: 'Crop Image',     desc: 'Drag to select crop area',            icon: '✂️' },
-  watermark: { title: 'Add Watermark',  desc: 'Add text watermark to your image',    icon: '💧' },
-  pixel:     { title: 'Pixel Art',      desc: 'Convert to pixel art style (no GPU)', icon: '🎨' },
-  rotate:    { title: 'Rotate Image',   desc: 'Rotate image 90°, 180°, 270°',        icon: '🔁' },
-  flip:      { title: 'Flip Image',     desc: 'Flip horizontal or vertical',         icon: '↔️' },
+  convert: { title: 'Convert Image', desc: 'Convert between image formats', icon: '🔄' },
+  resize: { title: 'Resize Image', desc: 'Change image width & height', icon: '📐' },
+  compress: { title: 'Compress Image', desc: 'Reduce image file size', icon: '🗜️' },
+  crop: { title: 'Crop Image', desc: 'Drag to select crop area', icon: '✂️' },
+  watermark: { title: 'Add Watermark', desc: 'Add text watermark to your image', icon: '💧' },
+  pixel: { title: 'Pixel Art', desc: 'Convert to pixel art style (no GPU)', icon: '🎨' },
+  rotate: { title: 'Rotate Image', desc: 'Rotate image 90°, 180°, 270°', icon: '🔁' },
+  flip: { title: 'Flip Image', desc: 'Flip horizontal or vertical', icon: '↔️' },
 }
 
 const FORMATS = ['jpeg', 'png', 'webp', 'avif', 'bmp', 'gif', 'tiff']
@@ -186,9 +187,9 @@ export default function ImageTool() {
       const formData = new FormData()
       formData.append('file', files[0])
 
-      if (tool === 'convert')   formData.append('format', options.format)
+      if (tool === 'convert') formData.append('format', options.format)
       if (tool === 'resize') {
-        if (options.width)  formData.append('width', options.width)
+        if (options.width) formData.append('width', options.width)
         if (options.height) formData.append('height', options.height)
         formData.append('format', options.format)
       }
@@ -221,14 +222,14 @@ export default function ImageTool() {
       }
 
       const endpoint = {
-        convert:   '/api/image/convert',
-        resize:    '/api/image/resize',
-        compress:  '/api/image/compress',
-        crop:      '/api/image/crop',
-        watermark: '/api/image/watermark',
-        pixel:     '/api/image/pixel-art',
-        rotate:    '/api/image/rotate',
-        flip:      '/api/image/flip',
+        convert: `${IMAGE_API}/convert`,
+        resize: `${IMAGE_API}/resize`,
+        compress: `${IMAGE_API}/compress`,
+        crop: `${IMAGE_API}/crop`,
+        watermark: `${IMAGE_API}/watermark`,
+        pixel: `${IMAGE_API}/pixel-art`,
+        rotate: `${IMAGE_API}/rotate`,
+        flip: `${IMAGE_API}/flip`,
       }[tool]
 
       const res = await axios.post(endpoint, formData, { responseType: 'blob' })

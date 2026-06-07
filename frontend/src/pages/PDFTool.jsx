@@ -1,3 +1,4 @@
+import { PDF_API } from '../api.js'
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import FileUploader from '../components/common/FileUploader.jsx'
@@ -5,18 +6,18 @@ import toast from 'react-hot-toast'
 import axios from 'axios'
 
 const TOOL_CONFIG = {
-  merge:       { title: 'Merge PDF',           desc: 'Select multiple PDFs to merge',        icon: '🔗', multiple: true  },
-  split:       { title: 'Split PDF',           desc: 'Select a PDF to split',                icon: '✂️', multiple: false },
-  compress:    { title: 'Compress PDF',        desc: 'Select a PDF to compress',             icon: '🗜️', multiple: false },
-  pdf2img:     { title: 'PDF to Image',        desc: 'Select a PDF to convert',              icon: '🖼️', multiple: false },
-  img2pdf:     { title: 'Image to PDF',        desc: 'Select images to convert',             icon: '📄', multiple: true  },
-  rotate:      { title: 'Rotate PDF',          desc: 'Select a PDF to rotate',               icon: '🔄', multiple: false },
-  pdf2word:    { title: 'PDF to Word',         desc: 'Select a PDF to convert to DOCX',      icon: '📝', multiple: false },
-  word2pdf:    { title: 'Word to PDF',         desc: 'Select a DOCX file to convert',        icon: '📃', multiple: false },
-  pdf2excel:   { title: 'PDF to Excel',        desc: 'Select a PDF to extract data',         icon: '📊', multiple: false },
-  excel2pdf:   { title: 'Excel to PDF',        desc: 'Select an XLSX file to convert',       icon: '📋', multiple: false },
-  pdf2ppt:     { title: 'PDF to PowerPoint',   desc: 'Select a PDF to convert to PPTX',      icon: '📊', multiple: false },
-  ppt2pdf:     { title: 'PowerPoint to PDF',   desc: 'Select a PPTX file to convert',        icon: '📑', multiple: false },
+  merge: { title: 'Merge PDF', desc: 'Select multiple PDFs to merge', icon: '🔗', multiple: true },
+  split: { title: 'Split PDF', desc: 'Select a PDF to split', icon: '✂️', multiple: false },
+  compress: { title: 'Compress PDF', desc: 'Select a PDF to compress', icon: '🗜️', multiple: false },
+  pdf2img: { title: 'PDF to Image', desc: 'Select a PDF to convert', icon: '🖼️', multiple: false },
+  img2pdf: { title: 'Image to PDF', desc: 'Select images to convert', icon: '📄', multiple: true },
+  rotate: { title: 'Rotate PDF', desc: 'Select a PDF to rotate', icon: '🔄', multiple: false },
+  pdf2word: { title: 'PDF to Word', desc: 'Select a PDF to convert to DOCX', icon: '📝', multiple: false },
+  word2pdf: { title: 'Word to PDF', desc: 'Select a DOCX file to convert', icon: '📃', multiple: false },
+  pdf2excel: { title: 'PDF to Excel', desc: 'Select a PDF to extract data', icon: '📊', multiple: false },
+  excel2pdf: { title: 'Excel to PDF', desc: 'Select an XLSX file to convert', icon: '📋', multiple: false },
+  pdf2ppt: { title: 'PDF to PowerPoint', desc: 'Select a PDF to convert to PPTX', icon: '📊', multiple: false },
+  ppt2pdf: { title: 'PowerPoint to PDF', desc: 'Select a PPTX file to convert', icon: '📑', multiple: false },
 }
 
 export default function PDFTool() {
@@ -41,33 +42,33 @@ export default function PDFTool() {
     try {
       const formData = new FormData()
       files.forEach(f => formData.append('files', f))
-      if (tool === 'rotate')      formData.append('degrees', options.rotate_degrees)
-      if (tool === 'protect')     formData.append('password', options.password)
-      if (tool === 'unlock')      formData.append('password', options.password)
+      if (tool === 'rotate') formData.append('degrees', options.rotate_degrees)
+      if (tool === 'protect') formData.append('password', options.password)
+      if (tool === 'unlock') formData.append('password', options.password)
       if (tool === 'pagenumbers') formData.append('position', options.position)
 
       const endpoint = {
-        merge:       '/api/pdf/merge',
-        split:       '/api/pdf/split',
-        compress:    '/api/pdf/compress',
-        pdf2img:     '/api/pdf/pdf-to-image',
-        img2pdf:     '/api/pdf/image-to-pdf',
-        rotate:      '/api/pdf/rotate',
-        pdf2word:    '/api/pdf/pdf-to-word',
-        word2pdf:    '/api/pdf/word-to-pdf',
-        pdf2excel:   '/api/pdf/pdf-to-excel',
-        excel2pdf:   '/api/pdf/excel-to-pdf',
-        pdf2ppt:     '/api/pdf/pdf-to-ppt',
-        ppt2pdf:     '/api/pdf/ppt-to-pdf',
+        merge: `${PDF_API}/merge`,
+        split: `${PDF_API}/split`,
+        compress: `${PDF_API}/compress`,
+        pdf2img: `${PDF_API}/pdf-to-image`,
+        img2pdf: `${PDF_API}/image-to-pdf`,
+        rotate: `${PDF_API}/rotate`,
+        pdf2word: `${PDF_API}/pdf-to-word`,
+        word2pdf: `${PDF_API}/word-to-pdf`,
+        pdf2excel: `${PDF_API}/pdf-to-excel`,
+        excel2pdf: `${PDF_API}/excel-to-pdf`,
+        pdf2ppt: `${PDF_API}/pdf-to-ppt`,
+        ppt2pdf: `${PDF_API}/ppt-to-pdf`,
       }[tool]
 
       const res = await axios.post(endpoint, formData, { responseType: 'blob' })
       const url = URL.createObjectURL(new Blob([res.data]))
       const ext = tool === 'pdf2img' || tool === 'split' ? 'zip'
-                : tool === 'pdf2word'  ? 'docx'
-                : tool === 'pdf2excel' ? 'xlsx'
-                : tool === 'pdf2ppt'   ? 'pptx'
-                : 'pdf'
+        : tool === 'pdf2word' ? 'docx'
+          : tool === 'pdf2excel' ? 'xlsx'
+            : tool === 'pdf2ppt' ? 'pptx'
+              : 'pdf'
       setResult({ url, ext })
       toast.success('Done! Click Download to save your file.')
     } catch (err) {
@@ -154,8 +155,8 @@ export default function PDFTool() {
         </button>
 
         {result && (
-        <a
-          
+          <a
+
             href={result.url}
             download={`result.${result.ext}`}
             className="btn-primary"
